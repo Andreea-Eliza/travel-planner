@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #7c5cfc;
+  --primary-light: #ede8ff;
+  --primary-dark: #5a3fd6;
+  --bg: #f4f2ff;
+  --bg-card: #ffffff;
+  --text: #2d2b3d;
+  --text-light: #8b8a9a;
+  --border: #e8e6f0;
+  --sidebar-width: 70px;
+  --sidebar-width-open: 220px;
+  --topbar-height: 64px;
+  --profile-width: 300px;
+  --radius: 16px;
+  --shadow: 0 2px 12px rgba(124, 92, 252, 0.08);
+  --shadow-hover: 0 8px 24px rgba(124, 92, 252, 0.15);
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: 'Inter', -apple-system, sans-serif;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+input, select {
+  font-family: inherit;
+  outline: none;
+}
+
+#root {
+  min-height: 100vh;
+}
