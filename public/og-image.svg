@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c5cfc"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="80" y="80" width="120" height="120" rx="28" fill="white" fill-opacity="0.18"/>
+  <text x="140" y="172" font-family="Inter, system-ui, sans-serif" font-size="84" font-weight="800" fill="white" text-anchor="middle">T</text>
+  <text x="240" y="155" font-family="Inter, system-ui, sans-serif" font-size="52" font-weight="700" fill="white">Travel Planner</text>
+  <text x="80" y="380" font-family="Inter, system-ui, sans-serif" font-size="76" font-weight="800" fill="white">Alege destinatia</text>
+  <text x="80" y="470" font-family="Inter, system-ui, sans-serif" font-size="76" font-weight="800" fill="white">perfecta pentru tine</text>
+  <text x="80" y="550" font-family="Inter, system-ui, sans-serif" font-size="32" font-weight="500" fill="white" fill-opacity="0.85">Decizii multi-criteriale · Harti · Planificare</text>
+</svg>
