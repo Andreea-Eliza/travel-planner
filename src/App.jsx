@@ -115,13 +115,6 @@ function App() {
   const [ahpMatrix, setAhpMatrix] = useState(() => safeLoadJSON("ahpMatrix", []));
   const [savedAnalyses, setSavedAnalyses] = useState(() => safeLoadJSON("savedAnalyses", []));
   const [trips, setTrips] = useState(() => safeLoadJSON("trips", []));
-  const [profile, setProfile] = useState(() => safeLoadJSON("profile", { name: "Utilizator", location: "Romania" }));
-  const [showProfileModal, setShowProfileModal] = useState(false);
-
-  const persistProfile = (data) => {
-    setProfile(data);
-    localStorage.setItem("profile", JSON.stringify(data));
-  };
 
   const persistTrips = (data) => {
     setTrips(data);
@@ -380,10 +373,6 @@ function App() {
             {icons.settings}
             <span className="sidebar-label">Setari</span>
           </button>
-          <button className="sidebar-profile" title={profile.name} onClick={() => setShowProfileModal(true)}>
-            <div className="sidebar-avatar">{profile.name.slice(0, 2).toUpperCase()}</div>
-            <span className="sidebar-label">{profile.name}</span>
-          </button>
         </div>
       </aside>
 
@@ -392,7 +381,7 @@ function App() {
         {/* Greeting */}
         <div className="greeting-section">
           <p className="greeting-date">{new Date().toLocaleDateString('ro-RO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
-          <h1 className="greeting-title">Salut, {profile.name}!</h1>
+          <h1 className="greeting-title">Bun venit!</h1>
         </div>
 
         {/* Navigation tabs */}
@@ -516,44 +505,6 @@ function App() {
           </div>
         </div>
       </main>
-
-      {/* Profile edit modal */}
-      {showProfileModal && (
-        <div className="modal-overlay" onClick={() => setShowProfileModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Editeaza profil</h3>
-              <button className="modal-close" onClick={() => setShowProfileModal(false)}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </button>
-            </div>
-            <form
-              className="modal-body trip-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const fd = new FormData(e.target);
-                const name = fd.get("name").toString().trim();
-                const loc = fd.get("location").toString().trim();
-                if (!name) return;
-                persistProfile({ name, location: loc || "" });
-                setShowProfileModal(false);
-              }}
-            >
-              <div className="trip-form-field">
-                <label>Nume *</label>
-                <input name="name" type="text" defaultValue={profile.name} required autoFocus />
-              </div>
-              <div className="trip-form-field">
-                <label>Locatie</label>
-                <input name="location" type="text" defaultValue={profile.location} placeholder="Romania" />
-              </div>
-              <button type="submit" className="btn-add-trip">Salveaza</button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
