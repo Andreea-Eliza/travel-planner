@@ -1,6 +1,7 @@
 // src/App.jsx
 import { useState, lazy, Suspense } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 
 // Pagina principala — incarcata imediat (e ce vede userul prima oara)
 import InputPage from "./pages/InputPage";
@@ -505,6 +506,7 @@ function App() {
           </div>
         </div>
       </main>
+      <Analytics />
     </div>
   );
 }
