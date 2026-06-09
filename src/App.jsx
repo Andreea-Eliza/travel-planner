@@ -109,6 +109,18 @@ function App() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [welcomeDismissed, setWelcomeDismissed] = useState(
+    () => localStorage.getItem("welcomeDismissed") === "1"
+  );
+
+  const dismissWelcome = () => {
+    try {
+      localStorage.setItem("welcomeDismissed", "1");
+    } catch {
+      // localStorage indisponibil — inchidem doar pentru sesiunea curenta
+    }
+    setWelcomeDismissed(true);
+  };
 
   const [locations, setLocations] = useState(() => safeLoadJSON("locations", []));
   const [criteria, setCriteria] = useState(() => safeLoadJSON("criteria", []));
@@ -262,7 +274,53 @@ function App() {
       localStorage.removeItem("scores");
       localStorage.removeItem("ahpMatrix");
       localStorage.removeItem("destinations");
+      // Dupa un reset complet readucem ghidajul de bun-venit
+      localStorage.removeItem("welcomeDismissed");
+      setWelcomeDismissed(false);
     }
+  };
+
+  // Incarca un set demo complet (locatii + criterii + scoruri + matrice AHP)
+  // ca un utilizator nou sa poata explora imediat tot fluxul, inclusiv Rezultatele.
+  const loadExample = () => {
+    const exLocations = [
+      { id: crypto.randomUUID(), name: "Barcelona", city: "Spania", type: "city-break", season: "vara" },
+      { id: crypto.randomUUID(), name: "Lisabona", city: "Portugalia", type: "cultural", season: "primavara" },
+      { id: crypto.randomUUID(), name: "Praga", city: "Cehia", type: "cultural", season: "toamna" },
+      { id: crypto.randomUUID(), name: "Santorini", city: "Grecia", type: "plaja", season: "vara" },
+    ];
+    const exCriteria = [
+      { id: crypto.randomUUID(), name: "Buget", weight: 30 },
+      { id: crypto.randomUUID(), name: "Vreme", weight: 25 },
+      { id: crypto.randomUUID(), name: "Activitati", weight: 25 },
+      { id: crypto.randomUUID(), name: "Siguranta", weight: 20 },
+    ];
+    // Scoruri 0-10, in ordinea: Buget, Vreme, Activitati, Siguranta
+    const scoreTable = [
+      [6, 8, 9, 8], // Barcelona
+      [8, 7, 7, 8], // Lisabona
+      [9, 6, 8, 9], // Praga
+      [5, 9, 7, 7], // Santorini
+    ];
+    const exScores = {};
+    exLocations.forEach((loc, i) => {
+      exScores[loc.id] = {};
+      exCriteria.forEach((crit, j) => {
+        exScores[loc.id][crit.id] = scoreTable[i][j];
+      });
+    });
+    // Matrice AHP coerenta cu greutatile de mai sus (triunghiul superior)
+    const exAhpMatrix = [
+      [1, 2, 2, 3],
+      [1 / 2, 1, 1, 2],
+      [1 / 2, 1, 1, 2],
+      [1 / 3, 1 / 2, 1 / 2, 1],
+    ];
+
+    persistLocations(exLocations);
+    persistCriteria(exCriteria);
+    persistScores(exScores);
+    persistAhpMatrix(exAhpMatrix);
   };
 
   const initializeDefaultScores = () => {
@@ -424,6 +482,9 @@ function App() {
                 initializeDefaultScores={initializeDefaultScores}
                 handleLocationsOrCriteriaChange={handleLocationsOrCriteriaChange}
                 persistAhpMatrix={persistAhpMatrix}
+                loadExample={loadExample}
+                welcomeDismissed={welcomeDismissed}
+                dismissWelcome={dismissWelcome}
               />
             } />
 

@@ -364,15 +364,190 @@
   color: var(--text);
 }
 
+/* ===== WELCOME HERO (onboarding utilizatori noi) ===== */
+.welcome-hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--primary), #a78bfa);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-hover);
+  overflow: hidden;
+}
+
+.welcome-dismiss {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+  transition: background 0.2s;
+}
+
+.welcome-dismiss:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.welcome-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 5px 12px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+}
+
+.welcome-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 10px;
+  max-width: 640px;
+}
+
+.welcome-subtitle {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 680px;
+  margin-bottom: 24px;
+}
+
+.welcome-subtitle strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+.welcome-steps {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
+.welcome-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 14px 16px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.welcome-step-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.welcome-step-text strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.welcome-step-text p {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.welcome-step-arrow {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.welcome-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.welcome-cta-primary {
+  background: #fff;
+  color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 24px;
+  border-radius: 12px;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.welcome-cta-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.welcome-cta-secondary {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.welcome-cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #fff;
+}
+
+.welcome-hint {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 640px) {
+  .welcome-hero {
+    padding: 24px 20px;
+  }
+  .welcome-step-arrow {
+    display: none;
+  }
+  .welcome-step {
+    min-width: 100%;
+  }
+}
+
 /* Search Bar */
 .search-bar {
   display: flex;
   align-items: center;
-  padding: 18px 16px;
+  padding: 0 18px;
   gap: 12px;
-  width: 636px;
-  height: 64px;
+  flex: 1;
+  max-width: 636px;
+  min-width: 0;
+  margin: 0 16px;
+  height: 44px;
   background: #FFFFFF;
+  border: 1px solid var(--border);
   border-radius: 100px;
 }
 
@@ -390,12 +565,15 @@
   background: transparent;
   font-family: inherit;
   font-weight: 500;
-  font-size: 18px;
-  line-height: 29px;
+  font-size: 0.95rem;
+  line-height: 1.4;
   color: var(--text);
   padding: 0;
   width: auto;
+  min-width: 0;
 }
+
+.search-bar svg { width: 20px; height: 20px; }
 
 .search-bar input[type="text"]:focus {
   outline: none;
@@ -775,6 +953,7 @@
   border-radius: 20px;
   border: 1px solid var(--border);
   transition: border-color 0.3s, box-shadow 0.3s;
+  min-width: 0; /* permite coloanei din grid sa se micsoreze; tabelele scroll-eaza intern */
 }
 
 .input-section:hover {
@@ -1053,6 +1232,106 @@
   margin-top: 8px;
   color: var(--text-light);
   font-size: 0.85rem;
+}
+
+/* AHP matrix table — stilizata sa se potriveasca cu restul aplicatiei */
+.ahp-matrix-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ahp-matrix-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 340px;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: var(--bg-card);
+}
+
+.ahp-matrix-table th,
+.ahp-matrix-table td {
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.ahp-corner {
+  background: var(--bg);
+}
+
+.ahp-col-head,
+.ahp-row-head {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.ahp-row-head {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.ahp-cell {
+  background: var(--bg-card);
+}
+
+.ahp-diagonal {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 7px;
+}
+
+.ahp-input {
+  width: 62px;
+  padding: 7px;
+  text-align: center;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.ahp-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.1);
+}
+
+.ahp-reciprocal {
+  color: var(--text-light);
+  font-style: italic;
+  font-size: 0.82rem;
+}
+
+.ahp-note {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+.ahp-note strong {
+  color: var(--text);
+}
+
+.ahp-empty {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  padding: 12px;
 }
 
 .placeholder-message {
@@ -3304,5 +3583,198 @@ button.action-button.secondary:hover {
 
   .tabs {
     flex-wrap: wrap;
+  }
+
+  /* Hero-uri si carduri mari: stivuire pe verticala */
+  .recommendation-hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .countdown-widget {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .countdown-info {
+    width: 100%;
+  }
+
+  /* Header-e cu space-between care trebuie sa se stivuiasca */
+  .score-section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .score-controls {
+    flex-wrap: wrap;
+  }
+
+  .matrix-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Footer date */
+  .app-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .data-info {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .summary-items {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* Grid-uri care raman pe 2 coloane -> 1 coloana */
+  .results-page .summary-cards,
+  .info-notes,
+  .trip-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Carduri salvate: actiuni sub continut */
+  .saved-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .saved-card-actions {
+    justify-content: flex-end;
+  }
+
+  /* Titluri mai mici */
+  .greeting-title { font-size: 1.4rem; }
+  .welcome-title { font-size: 1.3rem; }
+
+  /* CTA welcome pe toata latimea */
+  .welcome-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .welcome-cta-primary,
+  .welcome-cta-secondary {
+    text-align: center;
+  }
+}
+
+/* ===== RESPONSIVE — TABLETA (max 1024px) ===== */
+@media (max-width: 1024px) {
+  .main-area {
+    padding: 28px 24px;
+  }
+
+  .methods-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .results-page .summary-cards {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* ===== RESPONSIVE — TELEFON (max 560px) ===== */
+@media (max-width: 560px) {
+  .main-area {
+    padding: 16px 12px 32px;
+  }
+
+  /* Padding redus pe toate cardurile mari */
+  .input-section,
+  .score-section,
+  .why-section,
+  .all-destinations,
+  .saved-section,
+  .calendar-grid-section,
+  .trips-list-section,
+  .ranking-section,
+  .winner-details,
+  .methods-selector {
+    padding: 18px 16px;
+  }
+
+  /* Tab-urile ocupa toata latimea, egal impartite */
+  .tabs {
+    width: 100%;
+  }
+
+  .tab-button {
+    flex: 1;
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 0.82rem;
+  }
+
+  /* Calendar compact */
+  .calendar-grid {
+    gap: 3px;
+  }
+
+  .cal-day {
+    min-height: 54px;
+    padding: 4px;
+    border-radius: 8px;
+  }
+
+  .cal-day-name {
+    font-size: 0.58rem;
+    padding: 4px 0;
+  }
+
+  .cal-day-num {
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+  }
+
+  .cal-trip-bar {
+    font-size: 0.55rem;
+    padding: 1px 4px;
+  }
+
+  .calendar-header h2 {
+    font-size: 1rem;
+  }
+
+  /* Tabel clasament: coloane mai inguste ca sa incapa */
+  .header-cell.rank, .cell.rank { width: 36px; }
+  .header-cell.score, .cell.score { width: 52px; }
+  .header-cell.distance, .header-cell.weights,
+  .cell.distance, .cell.weights {
+    width: 84px;
+    font-size: 0.7rem;
+    white-space: normal;
+  }
+
+  .cell.name { min-width: 0; }
+  .cell.name strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Modale mai late pe ecran mic */
+  .modal-content {
+    width: 94%;
+  }
+
+  /* Hero rezultate: cerc compatibilitate mai mic */
+  .compat-circle {
+    width: 72px;
+    height: 72px;
+  }
+
+  .hero-name {
+    font-size: 1.25rem;
   }
 }

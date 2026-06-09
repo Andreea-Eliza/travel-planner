@@ -3,11 +3,12 @@ import LocationForm from "../components/LocationForm";
 import CriteriaForm from "../components/CriteriaForm";
 import ScoreMatrix from "../components/ScoreMatrix";
 import AHPPairwiseMatrix from "../components/AHPPairwiseMatrix";
+import WelcomeHero from "../components/WelcomeHero";
 
-function InputPage({ 
-  locations, 
-  criteria, 
-  scores, 
+function InputPage({
+  locations,
+  criteria,
+  scores,
   ahpMatrix,
   addLocation,
   addCriteria,
@@ -16,12 +17,21 @@ function InputPage({
   isDataComplete,
   initializeDefaultScores,
   handleLocationsOrCriteriaChange,
-  persistAhpMatrix
+  persistAhpMatrix,
+  loadExample,
+  welcomeDismissed,
+  dismissWelcome
 }) {
   const [showCriteriaInfo, setShowCriteriaInfo] = useState(false);
 
+  const showWelcome = locations.length === 0 && criteria.length === 0 && !welcomeDismissed;
+
   return (
     <div className="input-page">
+      {showWelcome && (
+        <WelcomeHero onLoadExample={loadExample} onDismiss={dismissWelcome} />
+      )}
+
       <div className="input-grid">
         <div className="input-section">
           <div className="section-card">

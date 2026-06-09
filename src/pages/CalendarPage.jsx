@@ -25,7 +25,6 @@ const daysBetween = (date1, date2) => {
 export default function CalendarPage({ trips, addTrip, deleteTrip }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [form, setForm] = useState({ name: '', destination: '', startDate: '', endDate: '' });
 
   const year = currentDate.getFullYear();
@@ -66,7 +65,6 @@ export default function CalendarPage({ trips, addTrip, deleteTrip }) {
   const handleDayClick = (dayObj) => {
     if (!dayObj.currentMonth) return;
     const dateStr = dayObj.date.toISOString().split('T')[0];
-    setSelectedDate(dayObj.date);
     setForm({ name: '', destination: '', startDate: dateStr, endDate: dateStr });
     setShowModal(true);
   };

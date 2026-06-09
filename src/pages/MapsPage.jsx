@@ -266,6 +266,10 @@ function MapsPage() {
     if (points.length >= 2 && routeInfo && travelMode !== lastCalculatedMode) {
       calculateRoute();
     }
+    // Nu includem calculateRoute: e definit mai jos (useCallback) si referirea lui
+    // in array-ul de dependinte ar fi evaluata inainte de initializare (TDZ).
+    // Corpul efectului ruleaza dupa montare, cand calculateRoute exista deja.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [travelMode, points, routeInfo, lastCalculatedMode]);
 
   // Adaugă acest useEffect pentru a închide dropdown-ul când dai click în afara
@@ -301,6 +305,9 @@ function MapsPage() {
       }
       window.removeEventListener('removePoint', handleRemovePoint);
     };
+    // Re-atașăm intenționat la fiecare schimbare de `points`, ca handler-ele
+    // (addPoint / handleRemovePoint) să opereze pe lista curentă, nu pe una învechită.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [points]);
 
   // Funcție pentru autocomplete
@@ -460,6 +467,9 @@ function MapsPage() {
     return () => {
       window.removeEventListener('addPointFromSearch', handleAddPointFromSearch);
     };
+    // Atașăm o singură dată: addPoint nu mai depinde de starea învechită
+    // (numărul/indexul punctului se calculează în updater-ul setPoints).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // FUNCȚIE SNAP V2 - Corectează punctele pe drumuri
@@ -533,27 +543,22 @@ function MapsPage() {
   };
 
   const addPoint = async (lat, lng, customName = null) => {
-    const pointNumber = points.length + 1;
-    const pointName = customName || `Punct ${pointNumber}`;
-    
-    const newPoint = {
-      id: Date.now() + pointNumber,
-      name: pointName,
-      lat,
-      lng,
-      number: pointNumber
-    };
-    
-    // Corectează punctul pe drum imediat
-    const snappedPoints = await snapPointsToRoad([newPoint], travelMode);
-    const finalPoint = snappedPoints[0];
-    
-    const markerIndex = points.length;
-    
+    // Corectează punctul pe drum imediat (numele/indexul se stabilesc la commit,
+    // pe baza lungimii reale a listei — vezi setPoints de mai jos)
+    const snappedPoints = await snapPointsToRoad([{ lat, lng }], travelMode);
+    const snapped = snappedPoints[0];
+
     setPoints(prev => {
-      const updatedPoints = [...prev, finalPoint];
+      const markerIndex = prev.length;
+      const pointNumber = prev.length + 1;
+      const finalPoint = {
+        ...snapped,
+        id: Date.now() + pointNumber,
+        name: customName || `Punct ${pointNumber}`,
+        number: pointNumber,
+      };
       addMarkerToMap(finalPoint.lat, finalPoint.lng, finalPoint.name, markerIndex, finalPoint.wasSnapped);
-      return updatedPoints;
+      return [...prev, finalPoint];
     });
   };
 
@@ -691,6 +696,9 @@ function MapsPage() {
     } finally {
       setLoading(false);
     }
+    // calculateCarRoute/calculateWalkingRoute sunt helpere stabile din componentă;
+    // nu le includem ca să nu invalidăm memoizarea la fiecare render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [points, travelMode, optimizeEnabled]);
 
   // Aplica un rezultat de ruta pe harta + setRouteInfo (folosit pentru cache hits si fallback)
@@ -1013,6 +1021,9 @@ function MapsPage() {
     if (points.length >= 2 && routeInfo) {
       calculateRoute();
     }
+    // Declanșăm recalcularea DOAR la comutarea optimizării; recalcularea la
+    // adăugarea de puncte e tratată de efectul dedicat de mai sus.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optimizeEnabled]);
 
   return (
