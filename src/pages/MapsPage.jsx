@@ -13,6 +13,21 @@ L.Icon.Default.mergeOptions({
 
 const COLORS = ['green', 'blue', 'red', 'orange', 'violet', 'yellow', 'violet', 'grey', 'black'];
 
+// Apeluri catre OpenRouteService.
+// In productie cheia ramane ascunsa intr-o functie serverless (/api/ors/...).
+// In dev local, daca exista VITE_ORS_API_KEY in .env, lovim direct ORS ca sa
+// mearga `npm run dev` fara `vercel dev`.
+const ORS_LOCAL_KEY = import.meta.env.VITE_ORS_API_KEY;
+
+const orsFetch = (path, options = {}) => {
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (ORS_LOCAL_KEY) {
+    headers.Authorization = ORS_LOCAL_KEY;
+    return fetch(`https://api.openrouteservice.org/${path}`, { ...options, headers });
+  }
+  return fetch(`/api/ors/${path}`, { ...options, headers });
+};
+
 // Funcția pentru calcularea distanței Haversine între două puncte (în km)
 const haversineDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371;
@@ -474,31 +489,22 @@ function MapsPage() {
 
   // FUNCȚIE SNAP V2 - Corectează punctele pe drumuri
   const snapPointsToRoad = async (pointsToSnap, mode) => {
-    const API_KEY = import.meta.env.VITE_ORS_API_KEY;
-    
     const profileMap = {
       'car': 'driving-car',
       'walking': 'foot-walking'
     };
     const profile = profileMap[mode] || 'driving-car';
-    
+
     const locations = pointsToSnap.map(p => [p.lng, p.lat]);
-    
+
     try {
-      const response = await fetch(
-        `https://api.openrouteservice.org/v2/snap/${profile}/json`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': API_KEY,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            locations: locations,
-            radius: 350
-          })
-        }
-      );
+      const response = await orsFetch(`v2/snap/${profile}/json`, {
+        method: 'POST',
+        body: JSON.stringify({
+          locations: locations,
+          radius: 350
+        })
+      });
       
       // Track API usage
       setApiUsage(prev => ({ ...prev, snap: prev.snap + 1 }));
@@ -728,8 +734,6 @@ function MapsPage() {
       return;
     }
 
-    const API_KEY = import.meta.env.VITE_ORS_API_KEY;
-
     try {
       // PAS 1: Corectează punctele pe drumuri înainte de calcul
       const snappedPoints = await snapPointsToRoad(routePoints, 'car');
@@ -737,21 +741,14 @@ function MapsPage() {
       // Folosește punctele corectate pentru routing
       const coordinates = snappedPoints.map(p => [p.lng, p.lat]);
 
-      const response = await fetch(
-        `https://api.openrouteservice.org/v2/directions/driving-car/geojson`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': API_KEY,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            coordinates: coordinates,
-            instructions: false,
-            preference: 'recommended'
-          })
-        }
-      );
+      const response = await orsFetch('v2/directions/driving-car/geojson', {
+        method: 'POST',
+        body: JSON.stringify({
+          coordinates: coordinates,
+          instructions: false,
+          preference: 'recommended'
+        })
+      });
 
       // Track API usage
       setApiUsage(prev => ({ ...prev, directions: prev.directions + 1 }));
@@ -797,8 +794,6 @@ function MapsPage() {
       return;
     }
 
-    const API_KEY = import.meta.env.VITE_ORS_API_KEY;
-
     let snappedPoints;
     try {
       // PAS 1: Corectează punctele pe drumuri pentru pietoni
@@ -817,24 +812,17 @@ function MapsPage() {
         const startPoint = snappedPoints[i];
         const endPoint = snappedPoints[i + 1];
         
-        const response = await fetch(
-          `https://api.openrouteservice.org/v2/directions/foot-walking/geojson`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': API_KEY,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              coordinates: [
-                [startPoint.lng, startPoint.lat],
-                [endPoint.lng, endPoint.lat]
-              ],
-              instructions: false,
-              preference: 'recommended'
-            })
-          }
-        );
+        const response = await orsFetch('v2/directions/foot-walking/geojson', {
+          method: 'POST',
+          body: JSON.stringify({
+            coordinates: [
+              [startPoint.lng, startPoint.lat],
+              [endPoint.lng, endPoint.lat]
+            ],
+            instructions: false,
+            preference: 'recommended'
+          })
+        });
 
         // Track API usage
         setApiUsage(prev => ({ ...prev, directions: prev.directions + 1 }));
